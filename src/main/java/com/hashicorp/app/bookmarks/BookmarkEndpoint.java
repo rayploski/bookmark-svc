@@ -90,7 +90,7 @@ public class BookmarkEndpoint {
         b.name = newBookmark.name;
         b.category = newBookmark.category;
         b.description = newBookmark.description;
-        b.url = newBookmark.url;
+        b.url = newBookmark.url;        
         Bookmark.persist(b);
 
         return Response.ok(b).status(201).build();
