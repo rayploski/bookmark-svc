@@ -2,9 +2,7 @@ package com.hashicorp.app.bookmarks;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
-import javax.persistence.Cacheable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.util.List;
 
 /**
@@ -21,8 +19,8 @@ public class Bookmark extends PanacheEntity {
     @Column(name = "bk_desc", length = 1024)
     public String description;
 
-    @Column(length = 128)
-    public String category;
+    @ManyToOne
+    public Category category;
 
     @Column(length = 2048, unique = true)
     public String url;
