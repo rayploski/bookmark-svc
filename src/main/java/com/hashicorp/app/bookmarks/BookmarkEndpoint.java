@@ -57,12 +57,11 @@ public class BookmarkEndpoint {
         throw new WebApplicationException("Bookmark with id of " + id + " does not exist.", 404);
        }
 
-    entity.name = bookmark.name;
-    entity.url = bookmark.url;
-    entity.description = bookmark.description;
-    entity.category = bookmark.category;
-
-    return entity;
+       entity.name = bookmark.name;
+       entity.url = bookmark.url;
+       entity.description = bookmark.description;
+       entity.category = bookmark.category;
+       return entity;
 
     }
 
@@ -92,7 +91,6 @@ public class BookmarkEndpoint {
         b.description = newBookmark.description;
         b.url = newBookmark.url;        
         Bookmark.persist(b);
-
         return Response.ok(b).status(201).build();
     }
 
