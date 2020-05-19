@@ -35,6 +35,32 @@ job "bookmark-db-job" {
     task "bookmark-db-task" {
       driver = "docker"
 
+      config {
+        image = "postgres:11"
+        port_map {
+          postgresql = 5432
+        }
+      }
+
+      resources {
+        cpu    = 500 #MHz
+        memory = 512 #MB
+        network {
+          port "postgresql" {
+            #TODO:  Clean this up once Consul and Nomad are connected together.
+            static = 5432
+          }
+        }
+      }
+
+      service {
+        port = "postgresql"
+        tags = ["bookmark-svc", "db", "postgres", "container"]
+        meta {
+          meta = "postgresql backend for the bookmark service."
+        }
+      }
+
       volume_mount {
         # mount to volume that is defined above
         volume      = "bookmark-volume"
@@ -52,24 +78,7 @@ job "bookmark-db-job" {
         "POSTGRES_DB"       = "bookmark"
       }
 
-      config {
-        image = "postgres:11"
 
-        port_map {
-          db = 5432
-        }
-      }
-
-      resources {
-        cpu    = 500 #MHz
-        memory = 512 #MB
-        network {
-          port "postgresql" {
-            #TODO:  Clean this up once Consul and Nomad are connected together.
-            static = 5432
-          }
-        }
-      }
     }
   }
 }
