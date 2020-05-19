@@ -46,9 +46,11 @@ job "bookmark-db-job" {
         cpu    = 500 #MHz
         memory = 512 #MB
         network {
+
           port "postgresql" {
-            #TODO:  Clean this up once Consul and Nomad are connected together.
-            static = 5432
+            # Currently postgres is set up to dynamically assign a port.
+            # Uncomment below if you prefer a static port.
+            # static = 5432
           }
         }
       }
@@ -59,6 +61,14 @@ job "bookmark-db-job" {
         meta {
           meta = "postgresql backend for the bookmark service."
         }
+
+        check {
+          type = "tcp"
+          port = "postgresql"
+          interval = "20s"
+          timeout = "5s"
+        }
+
       }
 
       volume_mount {
