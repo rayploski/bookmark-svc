@@ -1,0 +1,54 @@
+[
+  {
+    "ID": "7dd77df8-9036-86c0-a49a-b13808a12971",
+    "Node": "enceladus",
+    "Address": "10.0.1.220",
+    "Datacenter": "bend",
+    "TaggedAddresses": {
+      "lan": "10.0.1.220",
+      "lan_ipv4": "10.0.1.220",
+      "wan": "10.0.1.220",
+      "wan_ipv4": "10.0.1.220"
+    },
+    "NodeMeta": {
+      "consul-network-segment": ""
+    },
+    "ServiceKind": "",
+    "ServiceID": "_nomad-task-be47b6f3-aa22-8b85-6b6b-31d3575cee5c-bookmark-db-task-bookmark-db-job-bookmark-svc-bookmark-db-task-postgresql",
+    "ServiceName": "bookmark-db-job-bookmark-svc-bookmark-db-task",
+    "ServiceTags": [
+      "bookmark-svc",
+      "db",
+      "postgres",
+      "container"
+    ],
+    "ServiceAddress": "10.0.1.16",
+    "ServiceTaggedAddresses": {
+      "lan_ipv4": {
+        "Address": "10.0.1.16",
+        "Port": 31457
+      },
+      "wan_ipv4": {
+        "Address": "10.0.1.16",
+        "Port": 31457
+      }
+    },
+    "ServiceWeights": {
+      "Passing": 1,
+      "Warning": 1
+    },
+    "ServiceMeta": {
+      "external-source": "nomad",
+      "meta": "postgresql backend for the bookmark service."
+    },
+    "ServicePort": 31457,
+    "ServiceEnableTagOverride": false,
+    "ServiceProxy": {
+      "MeshGateway": {},
+      "Expose": {}
+    },
+    "ServiceConnect": {},
+    "CreateIndex": 127011,
+    "ModifyIndex": 127011
+  }
+]
