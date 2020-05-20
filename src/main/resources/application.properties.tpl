@@ -8,3 +8,4 @@ quarkus.datasource.max-size=8
 quarkus.datasource.min-size=2
 quarkus.hibernate-orm.database.generation=update
 quarkus.hibernate-orm.log.sql=true
+database.up=true

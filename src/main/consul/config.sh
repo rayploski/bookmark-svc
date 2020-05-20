@@ -20,3 +20,4 @@ consul kv put ${CONFIGSOURCE_CONSUL_PREFIX}/quarkus.datasource.max-size 8
 consul kv put ${CONFIGSOURCE_CONSUL_PREFIX}/quarkus.datasource.min-size 2
 consul kv put ${CONFIGSOURCE_CONSUL_PREFIX}/quarkus.hibernate-orm.database.generation update
 consul kv put ${CONFIGSOURCE_CONSUL_PREFIX}/quarkus.hibernate-orm.log.sql true
+consul kv put ${CONFIGSOURCE_CONSUL_PREFIX}/database.up true
