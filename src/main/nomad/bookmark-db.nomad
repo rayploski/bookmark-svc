@@ -85,7 +85,7 @@ job "bookmark-db-job" {
       env = {
         "POSTGRES_USER"     = "bookmark"
         "POSTGRES_PASSWORD" = "test"
-        "POSTGRES_DB"       = "bookmark"
+        "POSTGRES_DB"       = "bookmark-db"
       }
 
 

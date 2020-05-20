@@ -5,9 +5,18 @@
     "tags": ["application","bookmark-svc", "quarkus", "java"],
     "port": 8080,
     "check": {
-      "id": "http",
+      "id": "tcp",
       "name": "Web traffic on port 8080",
       "tcp": "localhost:8080",
+      "interval": "10s",
+      "timeout": "1s"
+    },
+    "check": {
+      "id": "http-live",
+      "name": "Simple Health Check",
+      "http": "http://localhost:8080/health/live",
+      "tls_skip_verify": true,
+      "method": "GET",
       "interval": "10s",
       "timeout": "1s"
     }
