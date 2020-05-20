@@ -14,8 +14,8 @@ echo database address is $service_address:$service_port
 #Put configuration for the microservice into Consul's Key/Value store
 consul kv put ${CONFIGSOURCE_CONSUL_PREFIX}/quarkus.datasource.url jdbc:postgresql://$service_address:$service_port/bookmark-db
 consul kv put ${CONFIGSOURCE_CONSUL_PREFIX}/quarkus.datasource.driver org.postgresql.Driver
-consul kv put ${CONFIGSOURCE_CONSUL_PREFIX}/quarkus.datasource.username postgres
-consul kv put ${CONFIGSOURCE_CONSUL_PREFIX}/quarkus.datasource.password docker
+consul kv put ${CONFIGSOURCE_CONSUL_PREFIX}/quarkus.datasource.username bookmark
+consul kv put ${CONFIGSOURCE_CONSUL_PREFIX}/quarkus.datasource.password test
 consul kv put ${CONFIGSOURCE_CONSUL_PREFIX}/quarkus.datasource.max-size 8
 consul kv put ${CONFIGSOURCE_CONSUL_PREFIX}/quarkus.datasource.min-size 2
 consul kv put ${CONFIGSOURCE_CONSUL_PREFIX}/quarkus.hibernate-orm.database.generation update
