@@ -9,5 +9,7 @@ client {
 }
 
 consul {
-
+  address = "127.0.0.1:8500"
+  allow_unauthenticated = true
+  auto_advertise = true
 }
