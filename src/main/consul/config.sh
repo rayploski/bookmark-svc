@@ -9,6 +9,8 @@ export CONFIGSOURCE_CONSUL_VALIDITY=30
 service_address=`curl http://${CONFIGSOURCE_CONSUL_HOST}/v1/catalog/service/bookmark-db-job-bookmark-svc-bookmark-db-task | jq -r .[].ServiceAddress`
 service_port=`curl http://${CONFIGSOURCE_CONSUL_HOST}/v1/catalog/service/bookmark-db-job-bookmark-svc-bookmark-db-task | jq .[].ServicePort`
 
+
+# TODO:  Check to make sure the nomad job is running, if not error out.
 echo database address is $service_address:$service_port
 
 #Put configuration for the microservice into Consul's Key/Value store
@@ -21,3 +23,5 @@ consul kv put ${CONFIGSOURCE_CONSUL_PREFIX}/quarkus.datasource.min-size 2
 consul kv put ${CONFIGSOURCE_CONSUL_PREFIX}/quarkus.hibernate-orm.database.generation update
 consul kv put ${CONFIGSOURCE_CONSUL_PREFIX}/quarkus.hibernate-orm.log.sql true
 consul kv put ${CONFIGSOURCE_CONSUL_PREFIX}/database.up true
+
+export CONFIGSOURCE_CONSUL_HOST CONFIGSOURCE_CONSUL_PREFIX CONFIGSOURCE_CONSUL_VALIDITY
