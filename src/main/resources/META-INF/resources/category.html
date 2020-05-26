@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Categories</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/wingcss/0.1.8/wing.min.css"/>
+    <style>
+        input[type=number] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            -webkit-transition: .5s;
+            transition: .5s;
+            outline: 0;
+            font-family: 'Open Sans', serif;
+        }
+    </style>
+    <!-- Load AngularJS -->
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script type="text/javascript">
+      var app = angular.module("CategoryManagement", []);
+
+      //Controller Part
+      app.controller("CategoryManagementController", function ($scope, $http) {
+
+        //Initialize page with default data which is blank in this example
+        $scope.categories = [];
+
+        $scope.form = {
+          id: -1,
+          name: ""
+        };
+
+        //Now load the data from server
+        _refreshPageData();
+
+        //HTTP POST/PUT methods for add/edit categories
+        $scope.update = function () {
+          var method = "";
+          var url = "";
+          var data = {};
+          if ($scope.form.id == -1) {
+            //Id is absent so add categories - POST operation
+            method = "POST";
+            url = '/categories';
+            data.name = $scope.form.name;
+
+          } else {
+            //If Id is present, it's edit operation - PUT operation
+            method = "PUT";
+            url = '/categories/' + $scope.form.id;
+            data.name = $scope.form.name;
+          }
+
+          $http({
+            method: method,
+            url: url,
+            data: angular.toJson(data),
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }).then(_success, _error);
+        };
+
+        //HTTP DELETE- delete category by id
+        $scope.remove = function (category) {
+          $http({
+            method: 'DELETE',
+            url: '/categories/' + category.id
+          }).then(_success, _error);
+        };
+
+        //In case of edit categories, populate form with category data
+        $scope.edit = function (category) {
+          $scope.form.name = category.name;
+          $scope.form.id = category.id;
+        };
+
+          /* Private Methods */
+        //HTTP GET- get all categories collection
+        function _refreshPageData() {
+          $http({
+            method: 'GET',
+            url: '/categories'
+          }).then(function successCallback(response) {
+            $scope.categories = response.data;
+          }, function errorCallback(response) {
+            console.log(response.statusText);
+          });
+        }
+
+        function _success(response) {
+          _refreshPageData();
+          _clearForm()
+        }
+
+        function _error(response) {
+          alert(response.data.message || response.statusText);
+        }
+
+        //Clear the form
+        function _clearForm() {
+          $scope.form.name = "";
+          $scope.form.id = -1;
+        }
+      });
+    </script>
+</head>
+<body ng-app="CategoryManagement" ng-controller="CategoryManagementController">
+
+<div class="container">
+    <h1>Categories</h1>
+    <p>This application is a prototype to collect useful resources for <a href="http://www.hashicorp.com">HashiCorp</a> employeees, partners and afficianados.  It implements a CRUD endpoint to manage categories using <a href="http://www.hibernate.org">Hibernate</a> with <a href=""">Panache</a>.
+        This management interface invokes the CRUD service endpoint, which interacts with a database using JPA and several other well known libraries.
+    </p>
+    
+    <h3>Add/Edit a category</h3>
+    <form ng-submit="update()">
+        <div class="row">
+            <div class="col-3"><input type="text" placeholder="Name" ng-model="form.name" size="60"/></div>
+        </div>
+        <input type="submit" value="Save"/>
+    </form>
+
+    <h3>Category List</h3>
+    <div class="row">
+        <div class="col-6">Category Name</div>
+    </div>
+    <div class="row" ng-repeat="category in categories">
+        <div class="col-6">{{ category.name }}</div>
+        <div class="col-4"><a ng-click="edit( category )" class="btn">Edit</a> <a ng-click="remove( category )" class="btn">Remove</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
