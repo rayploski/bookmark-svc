@@ -1,0 +1,157 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Bookmarks</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/wingcss/0.1.8/wing.min.css"/>
+    <style>
+        input[type=number] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            -webkit-transition: .5s;
+            transition: .5s;
+            outline: 0;
+            font-family: 'Open Sans', serif;
+        }
+    </style>
+    <!-- Load AngularJS -->
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script type="text/javascript">
+      var app = angular.module("BookmarkManagement", []);
+
+      //Controller Part
+      app.controller("BookmarkManagementController", function ($scope, $http) {
+
+        //Initialize page with default data which is blank in this example
+        $scope.bookmarks = [];
+
+        $scope.form = {
+          id: -1,
+          name: "",
+          description: "",
+          url: ""
+        };
+
+        //Now load the data from server
+        _refreshPageData();
+
+        //HTTP POST/PUT methods for add/edit bookmarks
+        $scope.update = function () {
+          var method = "";
+          var url = "";
+          var data = {};
+          if ($scope.form.id == -1) {
+            //Id is absent so add bookmarks - POST operation
+            method = "POST";
+            url = '/bookmarks';
+            data.name = $scope.form.name;
+            data.description = $scope.form.description;
+            data.url = $scope.form.url;
+
+          } else {
+            //If Id is present, it's edit operation - PUT operation
+            method = "PUT";
+            url = '/bookmarks/' + $scope.form.id;
+            data.name = $scope.form.name;
+            data.description = $scope.form.description;
+            data.url = $scope.form.url;
+          }
+
+          $http({
+            method: method,
+            url: url,
+            data: angular.toJson(data),
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }).then(_success, _error);
+        };
+
+        //HTTP DELETE- delete bookmark by id
+        $scope.remove = function (bookmark) {
+          $http({
+            method: 'DELETE',
+            url: '/bookmarks/' + bookmark.id
+          }).then(_success, _error);
+        };
+
+        //In case of edit bookmarks, populate form with bookmark data
+        $scope.edit = function (bookmark) {
+          $scope.form.name = bookmark.name;
+          $scope.form.description = bookmark.description;
+          $scope.form.url = bookmark.url;
+          $scope.form.id = bookmark.id;
+        };
+
+          /* Private Methods */
+        //HTTP GET- get all bookmarks collection
+        function _refreshPageData() {
+          $http({
+            method: 'GET',
+            url: '/bookmarks'
+          }).then(function successCallback(response) {
+            $scope.bookmarks = response.data;
+          }, function errorCallback(response) {
+            console.log(response.statusText);
+          });
+        }
+
+        function _success(response) {
+          _refreshPageData();
+          _clearForm()
+        }
+
+        function _error(response) {
+          alert(response.data.message || response.statusText);
+        }
+
+        //Clear the form
+        function _clearForm() {
+          $scope.form.name = "";
+          $scope.form.description = "";
+          $scope.form.url = "";
+          $scope.form.id = -1;
+        }
+      });
+    </script>
+</head>
+<body ng-app="BookmarkManagement" ng-controller="BookmarkManagementController">
+
+<div class="container">
+    <h1>Bookmarks</h1>
+    <p>This application is a prototype to collect useful resources for <a href="http://www.hashicorp.com">HashiCorp</a> employeees, partners and afficianados.  It implements a CRUD endpoint to manage bookmarks using <a href="http://www.hibernate.org">Hibernate</a> with <a href=""">Panache</a>.
+        This management interface invokes the CRUD service endpoint, which interacts with a database using JPA and several other well known libraries.
+    </p>
+    
+    <h3>Add/Edit a bookmark</h3>
+    <form ng-submit="update()">
+        <div class="row">
+            <div class="col-3"><input type="text" placeholder="Name" ng-model="form.name" size="60"/></div>
+            <div class="col-3"><input type="text" placeholder="URL" ng-model="form.url" size="512"/></div>
+            <div class="col-3"><input type="text" placeholder="Description" ng-model="form.description" size="1024"/></div>
+        </div>
+        <input type="submit" value="Save"/>
+    </form>
+
+    <h3>Bookmark List</h3>
+    <div class="row">
+        <div class="col-2">Name</div>
+        <div class="col-2">URL</div>
+        <div class="col-2">Description</div>
+    </div>
+    <div class="row" ng-repeat="bookmark in bookmarks">
+        <div class="col-2">{{ bookmark.name }}</div>
+        <div class="col-2"><a href="{{ bookmark.url }} ">{{ bookmark.url }}</a></div>
+        <div class="col-2">{{ bookmark.description }}</div>
+        <div class="col-4"><a ng-click="edit( bookmark )" class="btn">Edit</a> <a ng-click="remove( bookmark )" class="btn">Remove</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
