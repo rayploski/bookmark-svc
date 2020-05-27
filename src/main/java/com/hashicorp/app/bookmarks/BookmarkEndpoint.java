@@ -9,6 +9,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
+import java.util.Iterator;
 import java.util.List;
 
 @ApplicationScoped
@@ -86,10 +87,33 @@ public class BookmarkEndpoint {
     @Transactional
     public Response newBookmark(Bookmark newBookmark){
         Bookmark b = new Bookmark();
+        Category cat = new Category();
+
         b.name = newBookmark.name;
-        b.category = newBookmark.category;
         b.description = newBookmark.description;
-        b.url = newBookmark.url;        
+        b.url = newBookmark.url;
+
+        // Was a category passed in?
+        if (newBookmark.category != null && newBookmark.category.id != null) {
+
+            // YES - with a known id (simplest case)
+            cat = Category.findById(newBookmark.category.id);
+
+        } else if (newBookmark.category != null
+                && !newBookmark.category.name.isEmpty()
+                && !newBookmark.category.name.isBlank()) {
+
+            //YES - but we don't know if the category exists.
+            List<Category> categoryList =  Category.findByName(newBookmark.category.name);
+            if (!categoryList.isEmpty()){                  // the category exists.  Assign it the first match.
+                cat = categoryList.iterator().next();
+            } else {        // the category does not exist - create it and assign the Category object to the bookmark
+                Category.persist(newBookmark.category);
+                cat = Category.findByName(newBookmark.category.name).iterator().next();
+            }
+        }
+
+        b.category = cat;
         Bookmark.persist(b);
         return Response.ok(b).status(201).build();
     }
