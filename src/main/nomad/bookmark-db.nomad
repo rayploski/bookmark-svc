@@ -3,17 +3,27 @@
 # configuration is in this same directory and named client.hcl.
 # $ nomad run bookmark-db.nomad
 #
-job "bookmark-db-job" {
+job "bookmark-db" {
   datacenters = ["bend"]
 
   # Run this job as a "service" type. Each job type has different
   # properties.
+  # https://www.nomadproject.io/docs/job-specification/job/#type
   type = "service"
 
+  # Allows to specify a rescheduling strategy. Nomad will then attempt to schedule the task on another node if any of
+  #its allocation statuses become "failed".
+  # https://www.nomadproject.io/docs/job-specification/job/#reschedule
+  reschedule {
+    delay = "30s"
+    delay_function = "constant"
+    unlimited = true
+  }
   # A group defines a series of tasks that should be co-located
   # on the same client (host). All tasks within a group will be
   # placed on the same host.
-  group "bookmark-svc" {
+  # https://www.nomadproject.io/docs/job-specification/group/
+  group "bookmark-db" {
     count = 1
 
     volume "bookmark-volume" {
