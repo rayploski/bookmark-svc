@@ -23,7 +23,7 @@ job "bookmark-db" {
   # on the same client (host). All tasks within a group will be
   # placed on the same host.
   # https://www.nomadproject.io/docs/job-specification/group/
-  group "bookmark-db" {
+  group "bookmark-db-group" {
     count = 1
 
     volume "bookmark-volume" {
@@ -42,7 +42,7 @@ job "bookmark-db" {
 
     # Create an individual task (unit of work). This particular
     # task utilizes a Docker container to start a postgresql db.
-    task "bookmark-db-task" {
+    task "bookmark-db" {
       driver = "docker"
 
       config {

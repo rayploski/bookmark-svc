@@ -6,8 +6,8 @@ export CONFIGSOURCE_CONSUL_PREFIX="bookmark-svc"
 export CONFIGSOURCE_CONSUL_VALIDITY=30
 
 #Query Consul for the Nomad job running the postgresql database for the IP address and port
-service_address=`curl http://${CONFIGSOURCE_CONSUL_HOST}/v1/catalog/service/bookmark-db-job-bookmark-svc-bookmark-db-task | jq -r .[].ServiceAddress`
-service_port=`curl http://${CONFIGSOURCE_CONSUL_HOST}/v1/catalog/service/bookmark-db-job-bookmark-svc-bookmark-db-task | jq .[].ServicePort`
+service_address=`curl http://${CONFIGSOURCE_CONSUL_HOST}/v1/catalog/service/bookmark-db-bookmark-db-group-bookmark-db | jq -r .[].ServiceAddress`
+service_port=`curl http://${CONFIGSOURCE_CONSUL_HOST}/v1/catalog/service/bookmark-db-bookmark-db-group-bookmark-db | jq .[].ServicePort`
 
 
 # TODO:  Check to make sure the nomad job is running, if not error out.
