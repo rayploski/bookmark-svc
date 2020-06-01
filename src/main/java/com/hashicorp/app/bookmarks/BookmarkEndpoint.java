@@ -1,5 +1,6 @@
 package com.hashicorp.app.bookmarks;
 
+import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -19,23 +20,30 @@ import java.util.List;
 public class BookmarkEndpoint {
 
     @GET
+    @Operation(summary = "Get a list off all known bookmarks" ,
+            description = "Returns a list of all bookmarks in the database"
+    )
     public List<Bookmark> all() {
         return Bookmark.findAll().list();
     }
 
     @GET
     @Path("/by-name")
+    @Operation(summary = "Returns a list of bookmarks that match the provided name")
     public List<Bookmark> findByName(@PathParam String name){
         return Bookmark.findByName(name);
     }
+
     @GET
     @Path("/by-url")
+    @Operation(summary = "Returns a list of bookmarks that match the provided url")
     public List<Bookmark> findByUrl(@PathParam String url){
         return Bookmark.findByUrl(url);
     }
 
     @GET
     @Path("{id}")
+    @Operation(summary = "Returns a list of bookmarks that match the provided id")
     public Bookmark findById(@PathParam Long id) {
         Bookmark p = Bookmark.findById(id);
         if(p == null)
@@ -46,7 +54,8 @@ public class BookmarkEndpoint {
     @PUT
     @Path("{id}")
     @Transactional
-    public Bookmark update(@PathParam Long id, Bookmark bookmark) 
+    @Operation(summary = "Updates a bookmark")
+    public Bookmark update(@PathParam Long id, Bookmark bookmark)
     {
 
         if (bookmark.url == null ) {
@@ -69,7 +78,8 @@ public class BookmarkEndpoint {
     @DELETE
     @Path("{id}")
     @Transactional
-    public Response delete(@PathParam Long id) 
+    @Operation(summary = "Removes a bookmark")
+    public Response delete(@PathParam Long id)
     {
         
         Bookmark entity = Bookmark.findById(id);
@@ -85,6 +95,7 @@ public class BookmarkEndpoint {
 
     @POST
     @Transactional
+    @Operation(summary = "Creates a new bookmark (and category if necessary)")
     public Response newBookmark(Bookmark newBookmark){
         Bookmark b = new Bookmark();
         Category cat = new Category();
