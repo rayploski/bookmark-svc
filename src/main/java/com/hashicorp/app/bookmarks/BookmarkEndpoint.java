@@ -19,6 +19,8 @@ import java.util.List;
 @Consumes("application/json")
 public class BookmarkEndpoint {
 
+    private Long id;
+
     @GET
     @Operation(summary = "Get a list off all known bookmarks" ,
             description = "Returns a list of all bookmarks in the database"
@@ -57,6 +59,7 @@ public class BookmarkEndpoint {
     @Operation(summary = "Updates a bookmark")
     public Bookmark update(@PathParam Long id, Bookmark bookmark)
     {
+        this.id = id;
 
         if (bookmark.url == null ) {
             throw new WebApplicationException("Bookmark URL was not set on request.", 422);
@@ -105,7 +108,7 @@ public class BookmarkEndpoint {
         b.url = newBookmark.url;
 
         // Was a category passed in?
-        if (newBookmark.category != null && newBookmark.category.id != null) {
+        if ((newBookmark.category != null) && (newBookmark.category.id != null)) {
 
             // YES - with a known id (simplest case)
             cat = Category.findById(newBookmark.category.id);
