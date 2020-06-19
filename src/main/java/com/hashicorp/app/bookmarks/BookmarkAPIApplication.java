@@ -22,4 +22,5 @@ import javax.ws.rs.core.Application;
         )
 )
 public class BookmarkAPIApplication extends Application {
+    // Placeholder class for defining OpenAPI metadata.
 }
