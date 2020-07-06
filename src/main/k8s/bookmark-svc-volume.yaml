@@ -1,0 +1,22 @@
+apiVersion:  v1
+kind:  PersistentVolume
+metadata:
+  name: bookmark-pv
+  namespace: bookmark-svc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 50Gi
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-storage
+    local:
+      path: /media/external1/k8s-pv
+    nodeAffinity:
+      required:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                  - your_node_name
